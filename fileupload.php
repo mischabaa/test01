@@ -29,3 +29,12 @@
  * along with GLPI. If not, see <http://www.gnu.org/licenses/>.
  * ---------------------------------------------------------------------
  */
+
+/**
+ * @since 9.2
+ */
+
+include ('../inc/includes.php');
+
+Session::checkLoginUser();
+GLPIUploadHandler::uploadFiles($_REQUEST);

@@ -29,3 +29,19 @@
  * along with GLPI. If not, see <http://www.gnu.org/licenses/>.
  * ---------------------------------------------------------------------
  */
+
+$AJAX_INCLUDE = 1;
+include ('../inc/includes.php');
+
+header("Content-Type: text/html; charset=UTF-8");
+Html::header_nocache();
+
+Session::checkRight('ticket', UPDATE);
+
+if ($_POST["actortype"] > 0) {
+   $ticket = new Ticket();
+   $rand   = mt_rand();
+   $ticket->showActorAddForm($_POST["actortype"], $rand, $_SESSION['glpiactive_entity'], [],
+                             true, false, false);
+   echo "&nbsp;<input type='submit' name='add_actor' class='submit' value=\""._sx('button', 'Add')."\">";
+}

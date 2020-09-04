@@ -29,3 +29,31 @@
  * along with GLPI. If not, see <http://www.gnu.org/licenses/>.
  * ---------------------------------------------------------------------
  */
+
+/**
+ * Retrieve the knowledgebase links associated to a category
+ * @since   9.2
+*/
+
+include ('../inc/includes.php');
+
+// Send UTF8 Headers
+header("Content-Type: text/html; charset=UTF-8");
+Html::header_nocache();
+
+Session::checkLoginUser();
+
+if (isset($_POST["table"])
+    && isset($_POST["value"])) {
+   // Security
+   if (!$DB->tableExists($_POST['table'])) {
+      exit();
+   }
+
+   if (isset($_POST['withlink'])) {
+      $itemtype = getItemTypeForTable($_POST["table"]);
+      $item = new $itemtype;
+      $item->getFromDB(intval($_POST["value"]));
+      echo '&nbsp;'.$item->getLinks();
+   }
+}

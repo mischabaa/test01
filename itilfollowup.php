@@ -29,3 +29,24 @@
  * along with GLPI. If not, see <http://www.gnu.org/licenses/>.
  * ---------------------------------------------------------------------
  */
+
+/**
+ * @since 9.5
+ */
+
+$AJAX_INCLUDE = 1;
+
+include ('../inc/includes.php');
+header("Content-Type: application/json; charset=UTF-8");
+Html::header_nocache();
+
+Session::checkLoginUser();
+
+if (isset($_POST['itilfollowuptemplates_id'])
+    && $_POST['itilfollowuptemplates_id'] > 0) {
+   $template = new ITILFollowupTemplate();
+   $template->getFromDB($_POST['itilfollowuptemplates_id']);
+
+   $template->fields = array_map('html_entity_decode', $template->fields);
+   echo json_encode($template->fields);
+}

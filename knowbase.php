@@ -29,3 +29,21 @@
  * along with GLPI. If not, see <http://www.gnu.org/licenses/>.
  * ---------------------------------------------------------------------
  */
+
+include ('../inc/includes.php');
+Html::header_nocache();
+
+if (!$CFG_GLPI["use_public_faq"]
+    && !Session::haveRightsOr('knowbase', [KnowbaseItem::READFAQ, READ])) {
+   exit;
+}
+
+switch ($_REQUEST['action']) {
+   case "getItemslist";
+      header("Content-Type: application/json; charset=UTF-8");
+      KnowbaseItem::showList([
+         'knowbaseitemcategories_id' => (int) $_REQUEST['cat_id'],
+         'start'                     => (int) $_REQUEST['start'],
+      ], 'browse');
+      break;
+}

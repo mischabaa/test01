@@ -29,3 +29,34 @@
  * along with GLPI. If not, see <http://www.gnu.org/licenses/>.
  * ---------------------------------------------------------------------
  */
+
+include ('../inc/includes.php');
+Html::header_nocache();
+
+Session::checkLoginUser();
+
+if (!isset($_REQUEST['id'])) {
+   throw new \RuntimeException('Required argument missing!');
+}
+
+$id = $_REQUEST['id'];
+$current = isset($_REQUEST['current']) ? $_REQUEST['current'] : null;
+$rand = isset($_REQUEST['rand']) ? $_REQUEST['rand'] : mt_rand();
+
+$room = new DCRoom();
+if ($room->getFromDB($id)) {
+   $used = $room->getFilled($current);
+   $positions = $room->getAllPositions();
+
+   Dropdown::showFromArray(
+      'position',
+      $positions, [
+         'value'                 => $current,
+         'rand'                  => $rand,
+         'display_emptychoice'   => true,
+         'used'                  => $used
+      ]
+   );
+} else {
+   echo __('No room found or selected');
+}

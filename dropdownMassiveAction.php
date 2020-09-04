@@ -29,3 +29,21 @@
  * along with GLPI. If not, see <http://www.gnu.org/licenses/>.
  * ---------------------------------------------------------------------
  */
+
+include ('../inc/includes.php');
+
+header("Content-Type: text/html; charset=UTF-8");
+Html::header_nocache();
+
+try {
+   $ma = new MassiveAction($_POST, $_GET, 'specialize');
+} catch (Exception $e) {
+   echo "<div class='center'><img src='".$CFG_GLPI["root_doc"]."/pics/warning.png' alt='".
+      __s('Warning')."'><br><br>";
+   echo "<span class='b'>".$e->getMessage()."</span><br>";
+   echo "</div>";
+   exit();
+}
+
+$ma->showSubForm();
+

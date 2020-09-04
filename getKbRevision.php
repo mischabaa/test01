@@ -29,3 +29,28 @@
  * along with GLPI. If not, see <http://www.gnu.org/licenses/>.
  * ---------------------------------------------------------------------
  */
+
+/**
+ * @since 9.1
+ */
+
+include ('../inc/includes.php');
+header("Content-Type: application/json; charset=UTF-8");
+Html::header_nocache();
+
+Session::checkLoginUser();
+
+if (!isset($_POST['revid'])) {
+   throw new \RuntimeException('Required argument missing!');
+}
+
+$revid = $_POST['revid'];
+
+$revision = new KnowbaseItem_Revision();
+$revision->getFromDB($revid);
+$rev = [
+   'name'   => $revision->fields['name'],
+   'answer' => html_entity_decode($revision->fields['answer'])
+];
+
+echo json_encode($rev);

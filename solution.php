@@ -29,3 +29,32 @@
  * along with GLPI. If not, see <http://www.gnu.org/licenses/>.
  * ---------------------------------------------------------------------
  */
+
+$AJAX_INCLUDE = 1;
+
+include ('../inc/includes.php');
+header("Content-Type: text/html; charset=UTF-8");
+Html::header_nocache();
+
+Session::checkLoginUser();
+
+$rand = mt_rand();
+
+Html::initEditorSystem("content$rand");
+
+if (isset($_POST['value']) && ($_POST['value'] > 0)) {
+   $template = new SolutionTemplate();
+
+   if ($template->getFromDB($_POST['value'])) {
+      echo "<textarea id='content$rand' name='content' rows='12' cols='80'>";
+      echo $template->getField('content');
+      echo "</textarea>\n";
+      echo "<script type='text/javascript'>".
+               Html::jsSetDropdownValue($_POST["type_id"],
+                                        $template->getField('solutiontypes_id')).
+           "</script>";
+   }
+
+} else {
+      echo "<textarea id='content$rand' name='content' rows='12' cols='80'></textarea>";
+}

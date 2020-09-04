@@ -29,3 +29,23 @@
  * along with GLPI. If not, see <http://www.gnu.org/licenses/>.
  * ---------------------------------------------------------------------
  */
+
+/**
+ * @since 9.2
+ */
+
+$AJAX_INCLUDE = 1;
+
+include ('../inc/includes.php');
+header("Content-Type: application/json; charset=UTF-8");
+Html::header_nocache();
+
+Session::checkLoginUser();
+
+if (isset($_POST['projecttasktemplates_id']) && ($_POST['projecttasktemplates_id'] > 0)) {
+   $template = new ProjectTaskTemplate();
+   $template->getFromDB($_POST['projecttasktemplates_id']);
+
+   $template->fields = array_map('html_entity_decode', $template->fields);
+   echo json_encode($template->fields);
+}
